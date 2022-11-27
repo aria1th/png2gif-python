@@ -3,8 +3,17 @@ import os
 import glob
 from ast import literal_eval
 
+
+
+def find_images(base_path):
+    supported_exts = ['.png', '.jpg', 'webp']  # add by usage
+    res = []
+    for exts in supported_exts:
+        res += glob.glob(base_path+'\\*'+exts)
+    return res
+
 try:
-    size = literal_eval("Input image size to be resized (ex:232->232x232)\n")
+    size = literal_eval(input("Input image size to be resized (ex:232->232x232)\n"))
 except:
     size = 232
     print("Using default size 232x232\n")
@@ -19,7 +28,7 @@ try:
 except:
     print("Cannot find initial image!\n")
 
-for frame in sorted(glob.glob(folder_path + '\\*.png'), key = lambda b:int(''.join(a for a in b if a.isnumeric()))):
+for frame in sorted(find_images(folder_path), key=lambda b:int(''.join(a for a in b if a.isnumeric()))):
     frames.append(Image.open(frame).resize((size,size)))
 
 if len(base_path) <= 3:
